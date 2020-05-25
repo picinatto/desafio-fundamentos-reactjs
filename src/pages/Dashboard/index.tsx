@@ -29,27 +29,20 @@ interface Balance {
   total: string;
 }
 
-interface Response {
-  transactions: Transaction;
-  balance: Balance;
-}
-
 const Dashboard: React.FC = () => {
   const [transactions, setTransactions] = useState<Transaction[]>([]);
   const [balance, setBalance] = useState<Balance>({} as Balance);
 
   useEffect(() => {
     async function loadTransactions(): Promise<void> {
-      const response = await api.get<Response>('/transactions');
+      const response = await api.get('/transactions');
 
-      setTransactions([response.data.transactions]);
+      setTransactions(response.data.transactions);
       setBalance(response.data.balance);
     }
 
     loadTransactions();
   }, []);
-
-  console.log(transactions);
 
   return (
     <>
@@ -96,7 +89,7 @@ const Dashboard: React.FC = () => {
                   <td className="title">{transaction.title}</td>
                   <td className="income">{transaction.value}</td>
                   <td>{transaction.category.title}</td>
-                  <td>{transaction.formattedDate}</td>
+                  <td>{transaction.created_at}</td>
                 </tr>
               ))}
             </tbody>
