@@ -25,14 +25,17 @@ const Import: React.FC = () => {
   async function handleUpload(): Promise<void> {
     const data = new FormData();
 
+    // Check if there is a file (if not lenght > 0 (true))
     if (!uploadedFiles.length) return;
-
+    // Since we are using only one file upload, get the first item
     const file = uploadedFiles[0];
-
+    // Add to the form data
     data.append('file', file.file, file.name);
 
     try {
+      // Sends the data to the api posting
       await api.post('/transactions/import', data);
+      // Return to the last page after submiting
       history.push('/');
     } catch (err) {
       console.log(err.response.error);
@@ -40,12 +43,12 @@ const Import: React.FC = () => {
   }
 
   function submitFile(files: File[]): void {
+    // Map on the file data and create an object that is equal to the interface
     const uploadFiles = files.map(file => ({
       file,
       name: file.name,
       readableSize: filesize(file.size),
     }));
-
     setUploadedFiles(uploadFiles);
   }
   return (
